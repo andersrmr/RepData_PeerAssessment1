@@ -1,0 +1,29 @@
+## Repr Res Peer Assessment 1
+
+Load the data
+```{r, echo=TRUE}
+d <- read.csv("activity.csv",header=TRUE)
+```
+
+Mean total number of steps taken per day
+```{r, echo=TRUE}
+s <- split(d,d$date)
+```
+
+```{r, echo=TRUE,fig.width=4,fig.height=4}
+hist(sapply(s, function(x) sum(x[,1],na.rm=TRUE)),main="Total number of steps taken each day")
+
+```
+
+```{r, echo=TRUE}
+mean(sapply(s, function(x) sum(x[,1],na.rm=TRUE)))
+median(sapply(s, function(x) sum(x[,1],na.rm=TRUE)))
+```
+
+Average daily activity pattern
+```{r, echo=TRUE}
+#make time series plot
+mean(sapply(s, function(x) sum(x[,1],na.rm=TRUE)))
+median(sapply(s, function(x) sum(x[,1],na.rm=TRUE)))
+```
+
