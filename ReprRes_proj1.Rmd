@@ -21,9 +21,10 @@ median(sapply(s, function(x) sum(x[,1],na.rm=TRUE)))
 ```
 
 Average daily activity pattern
-```{r, echo=TRUE}
-#make time series plot
-mean(sapply(s, function(x) sum(x[,1],na.rm=TRUE)))
-median(sapply(s, function(x) sum(x[,1],na.rm=TRUE)))
+```{r, echo=TRUE, fig.width=4,fig.height=4}
+s <- split(d,d$interval)
+interval <- d[d$date=="2012-10-01","interval"]
+activity <- sapply(s, function(x) mean(x[,1],na.rm=TRUE))
+plot(interval,activity,type="l")
 ```
 
