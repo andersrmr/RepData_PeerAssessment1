@@ -26,5 +26,65 @@ s <- split(d,d$interval)
 interval <- d[d$date=="2012-10-01","interval"]
 activity <- sapply(s, function(x) mean(x[,1],na.rm=TRUE))
 plot(interval,activity,type="l")
+which.max(activity) 
 ```
+
+Inputting missing values
+```{r, echo=TRUE, fig.width=4,fig.height=4}
+sum(!is.na(d$steps))    #number of missing values (rows w/NAs)
+
+fill <- rep(activity,61)
+steps.fill <- numeric(length(d$steps))
+#This loop fills in NAs with mean for each interval
+for (i in 1:length(d$steps)) {
+        if (is.na(d$steps[i])) {
+                steps.fill[i] <- fill[i]
+        } else {
+                steps.fill[i] <- d$steps[i]
+        }
+}
+d.fill <- data.frame(d,steps.fill) #new filled data.frame
+s <- split(d.fill,d.fill$date)
+hist(sapply(s, function(x) sum(x[,4],na.rm=TRUE)),main="Total number of steps taken each day (Inputed missing values)")
+mean(sapply(s, function(x) sum(x[,4],na.rm=TRUE)))
+median(sapply(s, function(x) sum(x[,4],na.rm=TRUE)))
+
+```
+
+Differences in activity patterns between weekdays and weekends?
+```{r, echo=TRUE, fig.width=4,fig.height=4}
+#Create factor weekday vs. weekend variable
+wknd <- character(length(d.fill$steps))
+for (i in 1:length(d.fill$steps)) {
+        if (weekdays(as.Date(d.fill$date[i]))=="Saturday" |
+            weekdays(as.Date(d.fill$date[i]))=="Sunday") {
+                wknd[i] <- "weekend"
+        } else {
+                wknd[i] <- "weekday"
+        }
+}
+d.fill.wknd <- data.frame(d.fill,as.factor(wknd))
+#Create weekday vs. weekend activity pattern means
+s <- split(d.fill.wknd,d.fill.wknd$interval)
+activity.fill.wkdy <- sapply(s, function(x) 
+        mean(x[x$as.factor.wknd.=="weekday",4]))
+activity.fill.wknd <- sapply(s, function(x) 
+        mean(x[x$as.factor.wknd.=="weekend",4]))
+#Create data frame with weekday vs. weekend activity pattern mean data
+weekend <- gl(2,288,labels=c("weekday","weekend"))
+activity.fill.spl <- c(activity.fill.wkdy,activity.fill.wknd)
+activity.wk <- data.frame(activity.fill.spl,rep(interval,2),weekend)
+names(activity.wk) <- c("activity","interval","weekend")
+#Create panel plot using lattice
+library(lattice)
+xyplot(activity ~ interval | weekend, data = activity.wk,type="l",
+       layout=c(1,2),ylab="Number of steps",xlab="Interval")
+```
+
+
+
+
+
+
+
 
