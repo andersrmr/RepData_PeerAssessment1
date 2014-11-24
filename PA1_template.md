@@ -194,6 +194,17 @@ weekend <- gl(2,288,labels=c("weekday","weekend"))
 activity.fill.spl <- c(activity.fill.wkdy,activity.fill.wknd)
 activity.wk <- data.frame(activity.fill.spl,rep(interval,2),weekend)
 names(activity.wk) <- c("activity","interval","weekend")
+str(activity.wk)
+```
+
+```
+## 'data.frame':	576 obs. of  3 variables:
+##  $ activity: num  2.251 0.445 0.173 0.198 0.099 ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+##  $ weekend : Factor w/ 2 levels "weekday","weekend": 1 1 1 1 1 1 1 1 1 1 ...
+```
+
+```r
 #Create panel plot using lattice
 library(lattice)
 xyplot(activity ~ interval | weekend, data = activity.wk,type="l",

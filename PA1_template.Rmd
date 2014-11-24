@@ -17,7 +17,7 @@ d <- read.csv("activity.csv",header=TRUE)
 s <- split(d,d$date)
 ```
 
-```{r firstchunk, echo=TRUE,fig.width=4,fig.height=4}
+```{r, echo=TRUE,fig.width=4,fig.height=4}
 hist(sapply(s, function(x) sum(x[,1],na.rm=TRUE)),main="Total number of steps taken each day")
 ```
 
@@ -124,6 +124,7 @@ weekend <- gl(2,288,labels=c("weekday","weekend"))
 activity.fill.spl <- c(activity.fill.wkdy,activity.fill.wknd)
 activity.wk <- data.frame(activity.fill.spl,rep(interval,2),weekend)
 names(activity.wk) <- c("activity","interval","weekend")
+str(activity.wk)
 #Create panel plot using lattice
 library(lattice)
 xyplot(activity ~ interval | weekend, data = activity.wk,type="l",
